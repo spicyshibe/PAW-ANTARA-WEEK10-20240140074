@@ -101,8 +101,7 @@ Berikut adalah daftar screenshot hasil pengujian endpoint di Postman untuk dokum
 * **`POST /api/admin/login`** — Login Admin  
   ![POST Admin Login](./SCREENSHOT/LOGIN.png)
 
-* **`POST /api/admin/logout`** — Logout Admin — ⚠️ **[BELUM DI-SCREENSHOT]**  
-  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk logout di folder ./SCREENSHOT/LOGOUT.png -->
+* **`POST /api/admin/logout`** — Logout Admin — ⚠️
   ![POST Admin Logout](./SCREENSHOT/LOGOUT.png)
 
 ---
