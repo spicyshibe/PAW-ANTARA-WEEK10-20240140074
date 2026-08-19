@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS Bot AI — Toko Kita</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              950: '#070a12',
+              900: '#0b0f19',
+              850: '#111726',
+              800: '#172033',
+              700: '#23304a',
+              border: '#1e293b',
+              accent: '#06b6d4',
+              glow: 'rgba(6, 182, 212, 0.15)',
+              user: '#1e293b'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #070a12;
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0b0f19;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #334155;
+    }
+
+    .glow-effect {
+      box-shadow: 0 0 20px -5px rgba(6, 182, 212, 0.15);
+    }
+    
+    .glow-border {
+      border: 1px solid rgba(6, 182, 212, 0.25);
+    }
+
+    .typing-dot {
+      animation: typing 1.4s infinite ease-in-out both;
+    }
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    .futuristic-grid {
+      background-size: 30px 30px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col futuristic-grid overflow-hidden selection:bg-cyan-500/30 selection:text-cyan-200">
+
+  <!-- Header Section -->
+  <header class="h-16 border-b border-cyber-border bg-cyber-900/80 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-20">
+    <div class="flex items-center space-x-3">
+      <div class="w-9 h-9 rounded-lg bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono text-sm font-semibold shadow-inner">
+        AI
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <h1 class="text-base font-semibold tracking-wide text-slate-100">CS Bot Toko Kita</h1>
+          <span class="px-2 py-0.5 text-[10px] font-mono font-medium bg-cyan-950 text-cyan-400 border border-cyan-800/50 rounded-md">v1.0</span>
+        </div>
+        <p class="text-xs text-slate-400 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Customer Service Assistant • Gemini Grounded
+        </p>
+      </div>
+    </div>
+
+    <!-- Top Action Buttons -->
+    <div class="flex items-center space-x-3">
+      <!-- Consent Setting Trigger Pill -->
+      <button id="open-consent-modal-header" class="text-xs px-3 py-1.5 rounded-md transition flex items-center gap-1.5 font-mono border" title="Klik untuk mengubah persetujuan riwayat">
+        <span id="header-consent-indicator" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        <span id="header-consent-text" class="text-slate-300 font-sans font-medium">Izin Riwayat: Aktif</span>
+      </button>
+
+      <button id="toggle-sidebar-btn" class="md:hidden text-xs px-3 py-1.5 bg-cyber-800 hover:bg-cyber-700 text-slate-300 border border-slate-700/60 rounded-md transition flex items-center gap-1.5">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>Riwayat</span>
+      </button>
+
+      <button id="view-products-btn" class="text-xs px-3 py-1.5 bg-cyber-850 hover:bg-cyber-800 text-cyan-400 border border-cyan-900/50 hover:border-cyan-500/40 rounded-md transition flex items-center gap-1.5 font-medium">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+        <span>Katalog Produk</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- Sidebar: Message History (Riwayat Percakapan) -->
+    <aside id="history-sidebar" class="w-80 border-r border-cyber-border bg-cyber-900/90 flex flex-col shrink-0 transition-all duration-300 absolute md:static inset-y-0 left-0 z-10 transform -translate-x-full md:translate-x-0">
+      <div class="p-4 border-b border-cyber-border flex items-center justify-between bg-cyber-850/50">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-300">Riwayat Percakapan</h2>
+        </div>
+        <div class="flex items-center space-x-1">
+          <button id="refresh-history-btn" title="Refresh Riwayat" class="p-1.5 text-slate-400 hover:text-cyan-400 hover:bg-cyber-800 rounded-md transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          </button>
+          <button id="clear-history-btn" title="Hapus Semua Riwayat" class="p-1.5 text-slate-400 hover:text-rose-400 hover:bg-cyber-800 rounded-md transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="px-4 py-2 border-b border-cyber-border bg-cyber-950/60 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+        <span>Status Database</span>
+        <span id="history-count" class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">0 entri</span>
+      </div>
+
+      <!-- History List -->
+      <div id="history-list" class="flex-1 overflow-y-auto p-3 space-y-2">
+        <div class="text-center py-8 text-xs text-slate-500 italic">
+          Memuat riwayat percakapan...
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main class="flex-1 flex flex-col bg-cyber-950/40 relative overflow-hidden">
+
+      <!-- Quick Suggestion Bar -->
+      <div class="px-6 py-2 border-b border-cyber-border/60 bg-cyber-900/40 flex items-center gap-2 overflow-x-auto text-xs shrink-0">
+        <span class="text-slate-500 font-mono text-[11px] shrink-0">Saran:</span>
+        <button class="suggestion-chip px-2.5 py-1 bg-cyber-850 hover:bg-cyber-800 text-slate-300 border border-slate-800 hover:border-cyan-700/50 rounded-md transition whitespace-nowrap">
+          Ada produk apa saja?
+        </button>
+        <button class="suggestion-chip px-2.5 py-1 bg-cyber-850 hover:bg-cyber-800 text-slate-300 border border-slate-800 hover:border-cyan-700/50 rounded-md transition whitespace-nowrap">
+          Berapa harga kaos polos?
+        </button>
+        <button class="suggestion-chip px-2.5 py-1 bg-cyber-850 hover:bg-cyber-800 text-slate-300 border border-slate-800 hover:border-cyan-700/50 rounded-md transition whitespace-nowrap">
+          Apakah ada jaket sweater?
+        </button>
+      </div>
+
+      <!-- Chat Messages Container -->
+      <div id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4">
+        
+        <!-- Welcome Banner -->
+        <div class="max-w-2xl mx-auto p-4 rounded-lg bg-cyber-900/70 border border-cyan-900/40 text-slate-300 mb-6 glow-effect">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded bg-cyan-950 border border-cyan-800/60 flex items-center justify-center text-cyan-400 font-mono font-bold text-xs shrink-0 mt-0.5">
+              CS
+            </div>
+            <div class="space-y-1 text-sm">
+              <p class="font-semibold text-cyan-300">Selamat datang di Layanan CS Bot Toko Kita!</p>
+              <p class="text-xs text-slate-400 leading-relaxed">
+                Anda dapat menanyakan informasi seputar produk, harga, dan stok yang tersedia di toko kami. 
+                Sistem menyediakan opsi <span class="text-cyan-400 font-medium">Persetujuan Penyimpanan Riwayat (Consent Agreement)</span> untuk kenyamanan privasi Anda.
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Typing Indicator (Hidden by default) -->
+      <div id="typing-indicator" class="hidden px-6 py-2 bg-transparent shrink-0">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-cyber-900 border border-slate-800 text-slate-400 text-xs font-mono">
+          <span class="text-cyan-400">CS Bot sedang mengetik</span>
+          <div class="flex space-x-1 items-center">
+            <div class="w-1.5 h-1.5 bg-cyan-400 rounded-full typing-dot"></div>
+            <div class="w-1.5 h-1.5 bg-cyan-400 rounded-full typing-dot"></div>
+            <div class="w-1.5 h-1.5 bg-cyan-400 rounded-full typing-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Input Area & Consent Banner Bar -->
+      <div class="p-4 border-t border-cyber-border bg-cyber-900/90 backdrop-blur-md shrink-0">
+        <form id="chat-form" class="max-w-4xl mx-auto space-y-3">
+          
+          <!-- Consent Status Indicator Bar -->
+          <div class="flex items-center justify-between text-xs px-1">
+            <div class="flex items-center gap-2">
+              <span class="text-slate-400">Status Penyimpanan:</span>
+              <div id="consent-status-badge" class="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/50 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                <span>Disimpan Ke Database (Consent: True)</span>
+              </div>
+            </div>
+            <button 
+              type="button" 
+              id="open-consent-modal-btn" 
+              class="text-[11px] text-cyan-400 hover:text-cyan-300 underline underline-offset-2 font-mono transition"
+            >
+              Ubah Persetujuan
+            </button>
+          </div>
+
+          <!-- Message Text Input Box -->
+          <div class="flex items-center gap-2 relative">
+            <input 
+              type="text" 
+              id="message-input" 
+              placeholder="Tanyakan tentang harga, stok, atau deskripsi produk..." 
+              maxlength="500"
+              required
+              class="w-full bg-cyber-950 text-slate-100 placeholder-slate-500 text-sm rounded-lg px-4 py-3 border border-cyber-border focus:border-cyan-500/70 focus:ring-1 focus:ring-cyan-500/50 outline-none transition font-sans pr-24"
+            >
+            <div class="absolute right-3 flex items-center gap-2">
+              <span id="char-counter" class="text-[10px] font-mono text-slate-500 hidden sm:inline">0/500</span>
+              <button 
+                type="submit" 
+                id="send-btn"
+                class="px-4 py-2 bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs rounded-md transition flex items-center gap-1.5 shadow-md shadow-cyan-950/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span>Kirim</span>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+              </button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Agreement Pop-up Modal (Izin Penyimpanan Riwayat Chat) -->
+  <div id="consent-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-cyber-900 border border-cyan-900/60 rounded-lg max-w-md w-full p-6 shadow-2xl flex flex-col space-y-5 glow-effect">
+      
+      <div class="flex items-center space-x-3 border-b border-cyber-border pb-4">
+        <div class="w-10 h-10 rounded-lg bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-slate-100">Izin Penyimpanan Riwayat Chat</h3>
+          <p class="text-xs text-slate-400 font-mono">Persetujuan Penggunaan Data</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 text-xs leading-relaxed text-slate-300">
+        <p>
+          Apakah Anda mengizinkan sistem untuk menyimpan riwayat percakapan Anda ke dalam database?
+        </p>
+        
+        <div class="p-3 bg-cyber-950 border border-slate-800 rounded-md space-y-2">
+          <div class="flex items-start gap-2">
+            <span class="text-emerald-400 font-bold">✓</span>
+            <p><strong class="text-slate-200">Jika Setuju:</strong> Percakapan Anda akan disimpan di database agar dapat dilihat kembali di panel riwayat.</p>
+          </div>
+          <div class="flex items-start gap-2">
+            <span class="text-slate-400 font-bold">✕</span>
+            <p><strong class="text-slate-200">Jika Tidak Setuju:</strong> Percakapan <span class="text-cyan-400 font-medium">tetap dapat berjalan normal</span>, tetapi riwayat pesan sama sekali tidak akan disimpan di database.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-2 flex flex-col sm:flex-row gap-2.5 sm:justify-end">
+        <button 
+          id="consent-disagree-btn" 
+          class="px-4 py-2.5 bg-cyber-800 hover:bg-cyber-700 text-slate-300 hover:text-white border border-slate-700 text-xs font-medium rounded-md transition"
+        >
+          Tidak Setuju (Tetap Chat)
+        </button>
+        <button 
+          id="consent-agree-btn" 
+          class="px-4 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-medium rounded-md transition shadow-md shadow-cyan-950/50 flex items-center justify-center gap-1.5"
+        >
+          <span>Setuju & Simpan Riwayat</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Products Catalog Modal -->
+  <div id="products-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-cyber-900 border border-cyber-border rounded-lg max-w-2xl w-full p-6 shadow-2xl flex flex-col max-h-[85vh]">
+      <div class="flex items-center justify-between pb-4 border-b border-cyber-border">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+          <h3 class="text-base font-semibold text-slate-100">Katalog Produk Tersedia</h3>
+        </div>
+        <button id="close-modal-btn" class="text-slate-400 hover:text-slate-200 p-1 rounded-md hover:bg-cyber-800">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+      
+      <div id="modal-products-list" class="flex-1 overflow-y-auto py-4 space-y-3">
+        <p class="text-xs text-slate-400 italic">Memuat katalog...</p>
+      </div>
+
+      <div class="pt-4 border-t border-cyber-border text-right">
+        <button id="close-modal-footer" class="px-4 py-1.5 bg-cyber-800 hover:bg-cyber-700 text-slate-300 text-xs font-medium rounded-md transition">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Frontend Client JavaScript -->
+  <script>
+    // Generate simple Session ID for current user browser session
+    let sessionId = localStorage.getItem('cs_bot_session_id');
+    if (!sessionId) {
+      sessionId = 'session_' + Math.random().toString(36).substring(2, 10);
+      localStorage.setItem('cs_bot_session_id', sessionId);
+    }
+
+    // User consent state management
+    let userConsent = null; // true, false, or null (unset)
+    const storedConsent = localStorage.getItem('cs_bot_consent_granted');
+    if (storedConsent !== null) {
+      userConsent = storedConsent === 'true';
+    }
+
+    // DOM Elements
+    const chatContainer = document.getElementById('chat-container');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const consentModal = document.getElementById('consent-modal');
+    const consentAgreeBtn = document.getElementById('consent-agree-btn');
+    const consentDisagreeBtn = document.getElementById('consent-disagree-btn');
+    const openConsentModalBtn = document.getElementById('open-consent-modal-btn');
+    const openConsentModalHeader = document.getElementById('open-consent-modal-header');
+    const consentBadge = document.getElementById('consent-status-badge');
+    const headerConsentIndicator = document.getElementById('header-consent-indicator');
+    const headerConsentText = document.getElementById('header-consent-text');
+    
+    const historyList = document.getElementById('history-list');
+    const historyCount = document.getElementById('history-count');
+    const refreshHistoryBtn = document.getElementById('refresh-history-btn');
+    const clearHistoryBtn = document.getElementById('clear-history-btn');
+    const typingIndicator = document.getElementById('typing-indicator');
+    const sendBtn = document.getElementById('send-btn');
+    const charCounter = document.getElementById('char-counter');
+    const viewProductsBtn = document.getElementById('view-products-btn');
+    const productsModal = document.getElementById('products-modal');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const closeModalFooter = document.getElementById('close-modal-footer');
+    const modalProductsList = document.getElementById('modal-products-list');
+    const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+    const historySidebar = document.getElementById('history-sidebar');
+
+    // Update consent UI badges based on user choice
+    function updateConsentUI() {
+      if (userConsent === true) {
+        consentBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-800/50 flex items-center gap-1.5';
+        consentBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><span>Disimpan Ke DB (Consent: True)</span>';
+        
+        openConsentModalHeader.className = 'text-xs px-3 py-1.5 bg-emerald-950/80 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-800/60 rounded-md transition flex items-center gap-1.5 font-mono';
+        headerConsentIndicator.className = 'w-2 h-2 rounded-full bg-emerald-400';
+        headerConsentText.textContent = 'Izin Riwayat: Aktif';
+      } else {
+        consentBadge.className = 'text-[11px] font-mono px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800 flex items-center gap-1.5';
+        consentBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span><span>Tanpa Riwayat (Consent: False)</span>';
+        
+        openConsentModalHeader.className = 'text-xs px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-400 border border-slate-800 rounded-md transition flex items-center gap-1.5 font-mono';
+        headerConsentIndicator.className = 'w-2 h-2 rounded-full bg-slate-500';
+        headerConsentText.textContent = 'Izin Riwayat: Nonaktif';
+      }
+    }
+
+    // Modal Control Functions
+    function showConsentModal() {
+      consentModal.classList.remove('hidden');
+    }
+
+    function hideConsentModal() {
+      consentModal.classList.add('hidden');
+    }
+
+    // Check if consent has been decided, if not show modal on initial load
+    if (userConsent === null) {
+      showConsentModal();
+    } else {
+      hideConsentModal();
+      updateConsentUI();
+    }
+
+    // Event Handlers for Agreement Popup
+    consentAgreeBtn.addEventListener('click', () => {
+      userConsent = true;
+      localStorage.setItem('cs_bot_consent_granted', 'true');
+      updateConsentUI();
+      hideConsentModal();
+    });
+
+    consentDisagreeBtn.addEventListener('click', () => {
+      userConsent = false;
+      localStorage.setItem('cs_bot_consent_granted', 'false');
+      updateConsentUI();
+      hideConsentModal();
+    });
+
+    openConsentModalBtn.addEventListener('click', showConsentModal);
+    openConsentModalHeader.addEventListener('click', showConsentModal);
+
+    // Input character counter
+    messageInput.addEventListener('input', () => {
+      const len = messageInput.value.length;
+      charCounter.textContent = `${len}/500`;
+    });
+
+    // Mobile sidebar toggle
+    toggleSidebarBtn.addEventListener('click', () => {
+      historySidebar.classList.toggle('-translate-x-full');
+    });
+
+    // Click suggestion chip
+    document.querySelectorAll('.suggestion-chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        messageInput.value = btn.textContent.trim();
+        messageInput.focus();
+      });
+    });
+
+    // Format Timestamp
+    function formatTime(isoString) {
+      if (!isoString) return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const d = new Date(isoString);
+      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    // Append Message Bubble to UI
+    function appendMessage(sender, text, timeStr = null, isSaved = false) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = sender === 'user' 
+        ? 'flex flex-col items-end space-y-1' 
+        : 'flex flex-col items-start space-y-1';
+
+      const time = timeStr || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const avatarText = sender === 'user' ? 'YOU' : 'AI';
+
+      if (sender === 'user') {
+        messageDiv.innerHTML = `
+          <div class="flex items-start gap-2 max-w-[85%] sm:max-w-[70%]">
+            <div class="bg-cyber-user border border-slate-700/70 text-slate-100 text-sm px-4 py-2.5 rounded-lg shadow-sm">
+              <p class="whitespace-pre-wrap leading-relaxed">${escapeHtml(text)}</p>
+            </div>
+            <div class="w-7 h-7 rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+              ${avatarText}
+            </div>
+          </div>
+          <span class="text-[10px] font-mono text-slate-500 pr-9">${time}</span>
+        `;
+      } else {
+        const savedBadgeHtml = isSaved 
+          ? `<span class="text-[10px] font-mono text-cyan-400/80 bg-cyan-950/60 px-1.5 py-0.5 rounded border border-cyan-900/40">Saved to DB</span>`
+          : `<span class="text-[10px] font-mono text-slate-500 bg-slate-900 px-1.5 py-0.5 rounded border border-slate-800">Not Saved</span>`;
+
+        messageDiv.innerHTML = `
+          <div class="flex items-start gap-2 max-w-[90%] sm:max-w-[80%]">
+            <div class="w-7 h-7 rounded bg-cyan-950 border border-cyan-800/60 text-cyan-400 font-mono text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+              ${avatarText}
+            </div>
+            <div class="bg-cyber-900 border border-cyan-900/30 text-slate-200 text-sm px-4 py-3 rounded-lg shadow-sm">
+              <p class="whitespace-pre-wrap leading-relaxed">${escapeHtml(text)}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pl-9">
+            <span class="text-[10px] font-mono text-slate-500">${time}</span>
+            ${savedBadgeHtml}
+          </div>
+        `;
+      }
+
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Helper to escape HTML characters
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Fetch and Display History from Database (Endpoint Read)
+    async function loadHistory() {
+      historyList.innerHTML = '<div class="text-center py-4 text-xs text-slate-500 italic">Memuat...</div>';
+      try {
+        const res = await fetch('/api/chat/history');
+        const data = await res.json();
+
+        if (data.success && Array.isArray(data.data)) {
+          const items = data.data;
+          historyCount.textContent = `${items.length} entri`;
+
+          if (items.length === 0) {
+            historyList.innerHTML = `
+              <div class="text-center py-8 text-xs text-slate-500">
+                Belum ada riwayat percakapan tersimpan di database.
+              </div>
+            `;
+            return;
+          }
+
+          historyList.innerHTML = '';
+          items.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'p-3 bg-cyber-850 hover:bg-cyber-800 border border-slate-800 hover:border-cyan-800/60 rounded-md transition cursor-pointer group';
+            card.innerHTML = `
+              <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1">
+                <span class="text-cyan-400 font-semibold">ID #${item.id}</span>
+                <span>${formatTime(item.createdAt)}</span>
+              </div>
+              <p class="text-xs text-slate-200 font-medium truncate mb-1">${escapeHtml(item.userMessage)}</p>
+              <p class="text-[11px] text-slate-400 line-clamp-2 leading-relaxed font-sans">${escapeHtml(item.aiResponse)}</p>
+            `;
+
+            // Click card to view message in chat area
+            card.addEventListener('click', () => {
+              appendMessage('user', item.userMessage, formatTime(item.createdAt));
+              appendMessage('ai', item.aiResponse, formatTime(item.createdAt), true);
+            });
+
+            historyList.appendChild(card);
+          });
+        } else {
+          historyList.innerHTML = `<div class="text-center py-4 text-xs text-rose-400">Gagal memuat riwayat.</div>`;
+        }
+      } catch (err) {
+        console.error('Error loading history:', err);
+        historyList.innerHTML = `<div class="text-center py-4 text-xs text-rose-400">Koneksi gagal.</div>`;
+      }
+    }
+
+    // Clear History Button Action
+    clearHistoryBtn.addEventListener('click', async () => {
+      if (!confirm('Apakah Anda yakin ingin menghapus semua riwayat percakapan dari database?')) return;
+      try {
+        const res = await fetch('/api/chat/history', { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          loadHistory();
+        }
+      } catch (err) {
+        alert('Gagal menghapus riwayat.');
+      }
+    });
+
+    refreshHistoryBtn.addEventListener('click', loadHistory);
+
+    // Send Message Form Submission (Endpoint Create)
+    chatForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = messageInput.value.trim();
+      if (!message) return;
+
+      // If user hasn't made a choice yet, default to false if modal bypassed
+      const activeConsent = userConsent === true;
+
+      // Show user message in chat
+      appendMessage('user', message);
+      messageInput.value = '';
+      charCounter.textContent = '0/500';
+
+      // UI state loading
+      typingIndicator.classList.remove('hidden');
+      sendBtn.disabled = true;
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, consent: activeConsent, sessionId })
+        });
+
+        const data = await res.json();
+
+        if (data.success && data.data) {
+          appendMessage('ai', data.data.reply, null, data.data.saved);
+          
+          // Refresh history list if consent was granted and message saved
+          if (data.data.saved) {
+            loadHistory();
+          }
+        } else {
+          appendMessage('ai', data.message || 'Terjadi kesalahan pada server.', null, false);
+        }
+      } catch (err) {
+        console.error('Chat error:', err);
+        appendMessage('ai', 'Gagal terhubung ke server. Periksa koneksi backend Anda.', null, false);
+      } finally {
+        typingIndicator.classList.add('hidden');
+        sendBtn.disabled = false;
+        messageInput.focus();
+      }
+    });
+
+    // View Products Modal Action
+    async function loadModalProducts() {
+      modalProductsList.innerHTML = '<p class="text-xs text-slate-400 italic">Memuat daftar produk...</p>';
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+
+        if (data.success && Array.isArray(data.data)) {
+          if (data.data.length === 0) {
+            modalProductsList.innerHTML = '<p class="text-xs text-slate-400">Tidak ada produk tersedia di database.</p>';
+            return;
+          }
+          modalProductsList.innerHTML = '';
+          data.data.forEach(p => {
+            const item = document.createElement('div');
+            item.className = 'p-3 bg-cyber-850 border border-slate-800 rounded-md flex justify-between items-center';
+            item.innerHTML = `
+              <div>
+                <h4 class="text-sm font-semibold text-slate-100">${escapeHtml(p.name)}</h4>
+                <p class="text-xs text-slate-400 leading-normal mt-0.5">${escapeHtml(p.description || 'Tanpa deskripsi')}</p>
+              </div>
+              <div class="text-right shrink-0 ml-4 font-mono">
+                <div class="text-xs font-bold text-cyan-400">Rp ${Number(p.price).toLocaleString('id-ID')}</div>
+                <div class="text-[10px] text-slate-400">Stok: ${p.stock}</div>
+              </div>
+            `;
+            modalProductsList.appendChild(item);
+          });
+        }
+      } catch (err) {
+        modalProductsList.innerHTML = '<p class="text-xs text-rose-400">Gagal mengambil katalog produk.</p>';
+      }
+    }
+
+    viewProductsBtn.addEventListener('click', () => {
+      productsModal.classList.remove('hidden');
+      loadModalProducts();
+    });
+
+    closeModalBtn.addEventListener('click', () => productsModal.classList.add('hidden'));
+    closeModalFooter.addEventListener('click', () => productsModal.classList.add('hidden'));
+
+    // Initial Load History on page open
+    loadHistory();
+  </script>
+</body>
+</html>

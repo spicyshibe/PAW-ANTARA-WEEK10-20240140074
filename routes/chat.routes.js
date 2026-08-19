@@ -1,9 +1,16 @@
 const express = require('express');
 const router = express.Router();
 const validateChatInput = require('../middlewares/validateChatInput.middleware');
-const { chat } = require('../controllers/chat.controller');
+const { chat, getHistory, clearHistory } = require('../controllers/chat.controller');
 
-// endpoint public, user gak perlu login buat nanya ke CS bot
+// Endpoint public chat (user kirim pesan & opsional simpan jika consent)
 router.post('/', validateChatInput, chat);
+
+// Endpoint read riwayat percakapan
+router.get('/history', getHistory);
+router.get('/', getHistory);
+
+// Endpoint delete riwayat percakapan (opsional)
+router.delete('/history', clearHistory);
 
 module.exports = router;

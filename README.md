@@ -85,9 +85,61 @@ npm run dev
 | DELETE | /api/products/:id      | admin       | -                                         | Hapus produk       |
 
 ### Chat (CS Bot)
-| Method | Endpoint    | Auth   | Body               | Keterangan              |
-|--------|--------------|--------|----------------------|---------------------------|
-| POST   | /api/chat    | publik | `{ message }`        | Kirim pertanyaan ke bot  |
+| Method | Endpoint           | Auth   | Body                      | Keterangan                             |
+|--------|--------------------|--------|---------------------------|----------------------------------------|
+| POST   | /api/chat          | publik | `{ message, consent? }`   | Kirim pertanyaan ke bot                |
+| GET    | /api/chat/history  | publik | -                         | Ambil riwayat percakapan (Week 10)     |
+| DELETE | /api/chat/history  | publik | -                         | Hapus riwayat percakapan (Opsional)    |
+
+---
+
+## Screenshot & Dokumentasi Testing Endpoints
+
+Berikut adalah daftar screenshot hasil pengujian endpoint di Postman untuk dokumentasi GitHub.
+
+### 🔑 1. Admin Endpoints
+* **`POST /api/admin/login`** — Login Admin  
+  ![POST Admin Login](./SCREENSHOT/LOGIN.png)
+
+* **`POST /api/admin/logout`** — Logout Admin — ⚠️ **[BELUM DI-SCREENSHOT]**  
+  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk logout di folder ./SCREENSHOT/LOGOUT.png -->
+  ![POST Admin Logout](./SCREENSHOT/LOGOUT.png)
+
+---
+
+### 📦 2. Product Endpoints
+* **`GET /api/products`** — List Semua Produk  
+  ![GET Products](./SCREENSHOT/GET%20api:products.png)
+
+* **`POST /api/products`** — Tambah Produk (Admin)  
+  ![POST Products](./SCREENSHOT/POST%20ADMIN%20:api:products%20.png)
+
+* **`PUT /api/products/:id`** — Update Produk (Admin)  
+  ![PUT Products](./SCREENSHOT/PUT%20ADMIN%20:api:products:id.png)
+
+* **`DELETE /api/products/:id`** — Hapus Produk (Admin)  
+  ![DELETE Products](./SCREENSHOT/DELETE%20ADMIN%20:api:products:id.png)
+
+---
+
+### 💬 3. Chat & History Endpoints (Fitur Utama Week 10)
+* **`POST /api/chat`** — Kirim Pesan ke Bot AI  
+  ![POST Chat](./SCREENSHOT/POST%20:api:chat.png)
+
+* **`GET /api/chat/history`** — Ambil Riwayat Percakapan — ⚠️ **[BELUM DI-SCREENSHOT - PENTING FITUR WEEK 10]**  
+  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk get history di folder ./SCREENSHOT/GET_api_chat_history.png -->
+  ![GET Chat History](./SCREENSHOT/GET_api_chat_history.png)
+
+* **`DELETE /api/chat/history`** — Hapus Riwayat Percakapan — ⚠️ **[BELUM DI-SCREENSHOT]**  
+  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk delete history di folder ./SCREENSHOT/DELETE_api_chat_history.png -->
+  ![DELETE Chat History](./SCREENSHOT/DELETE_api_chat_history.png)
+
+---
+
+### 🌐 4. Root / Health Check Endpoint (Opsional)
+* **`GET /api`** — Cek Status Server — ⚠️ **[BELUM DI-SCREENSHOT]**  
+  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk GET /api di folder ./SCREENSHOT/GET_api.png -->
+  ![GET API Status](./SCREENSHOT/GET_api.png)
 
 Contoh request:
 ```json

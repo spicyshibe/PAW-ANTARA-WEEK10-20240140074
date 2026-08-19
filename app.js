@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
+const path = require('path');
 const { sequelize } = require('./models');
 
 const adminRoutes = require('./routes/admin.routes');
@@ -23,11 +24,14 @@ app.use(
   })
 );
 
+// Serve static files (HTML/CSS/JS frontend UI)
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use('/api/admin', adminRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/chat', chatRoutes);
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.json({ message: 'CS Bot API jalan bre 🤖' });
 });
 
