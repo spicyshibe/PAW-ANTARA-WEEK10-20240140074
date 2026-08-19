@@ -126,19 +126,16 @@ Berikut adalah daftar screenshot hasil pengujian endpoint di Postman untuk dokum
 * **`POST /api/chat`** — Kirim Pesan ke Bot AI  
   ![POST Chat](./SCREENSHOT/POST%20:api:chat.png)
 
-* **`GET /api/chat/history`** — Ambil Riwayat Percakapan — ⚠️ **[BELUM DI-SCREENSHOT - PENTING FITUR WEEK 10]**  
-  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk get history di folder ./SCREENSHOT/GET_api_chat_history.png -->
+* **`GET /api/chat/history`** — Ambil Riwayat Percakapan — ⚠️  
   ![GET Chat History](./SCREENSHOT/GET_api_chat_history.png)
 
-* **`DELETE /api/chat/history`** — Hapus Riwayat Percakapan — ⚠️ **[BELUM DI-SCREENSHOT]**  
-  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk delete history di folder ./SCREENSHOT/DELETE_api_chat_history.png -->
+* **`DELETE /api/chat/history`** — Hapus Riwayat Percakapan — ⚠️  
   ![DELETE Chat History](./SCREENSHOT/DELETE_api_chat_history.png)
 
 ---
 
 ### 🌐 4. Root / Health Check Endpoint (Opsional)
-* **`GET /api`** — Cek Status Server — ⚠️ **[BELUM DI-SCREENSHOT]**  
-  <!-- PLACEHOLDER: Masukkan screenshot Postman untuk GET /api di folder ./SCREENSHOT/GET_api.png -->
+* **`GET /api`** — Cek Status Server — ⚠️  
   ![GET API Status](./SCREENSHOT/GET_api.png)
 
 Contoh request:
